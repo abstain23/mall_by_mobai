@@ -7,12 +7,12 @@
 </template>
 
 <style lang="scss">
-
-
+  @import 'assets/css/base.css';
 </style>
 
 <script>
 import MainTabBar from 'components/content/MainTabBar'
+
 
   export default {
     name:'App',
