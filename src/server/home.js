@@ -7,4 +7,13 @@ export function getHomeMultidata(){
   })
 }
 
+export function getHomeGoods(type,page){
+  return request({
+    url:"/home/data",
+    params:{
+      type:type,
+      page:page
+    }
+  })
+}
 
