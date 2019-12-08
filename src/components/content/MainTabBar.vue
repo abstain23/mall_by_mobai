@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="tab-bar-wrapper">
       <tab-bar>
       <tab-bar-item path='/home' activeColor='blue'>
         <img src="~assets/img/tabbar/home.svg" slot='item-icon'>
@@ -46,5 +46,13 @@ export default {
 </script>
 
 <style lang='scss'>
-
+  .tab-bar-wrapper{
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #f6f6f6;
+    box-shadow: 0 -2px 1px rgba(100,100,100,.1);
+    z-index: 9999;
+  }
 </style>

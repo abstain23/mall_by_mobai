@@ -3,68 +3,14 @@
     <nav-bar class="home-nav">
       <span slot='center'>购物街</span>
     </nav-bar>
-    <home-swiper :banner='banner'></home-swiper>
-    <home-recommend :recommend='recommend'></home-recommend>
-    <feature-view></feature-view>
-    <tab-control :titles='titles' @changeType='changeType'></tab-control>
-    <goods :goods='showGoods'></goods>
-    <ul>
-      <li>12</li>
-      <li>22</li>
-      <li>32</li>
-      <li>42</li>
-      <li>52</li>
-      <li>42</li>
-      <li>52</li>
-      <li>52</li>
-      <li>42</li>
-      <li>52</li>
-      <li>52</li>
-      <li>42</li>
-      <li>52</li>
-      <li>52</li>
-      <li>42</li>
-      <li>52</li>
-      <li>52</li>
-      <li>42</li>
-      <li>52</li>
-      <li>52</li>
-      <li>42</li>
-      <li>52</li>
-      <li>52</li>
-      <li>42</li>
-      <li>52</li>
-      <li>52</li>
-      <li>42</li>
-      <li>52</li>
-      <li>52</li>
-      <li>42</li>
-      <li>52</li>
-      <li>52</li>
-      <li>42</li>
-      <li>52</li>
-      <li>52</li>
-      <li>52</li>
-      <li>42</li>
-      <li>52</li>
-      <li>42</li>
-      <li>52</li>
-      <li>52</li>
-      <li>42</li>
-      <li>52</li>
-      <li>52</li>
-      <li>42</li>
-      <li>52</li>
-      <li>52</li>
-      <li>42</li>
-      <li>52</li>
-      <li>52</li>
-      <li>42</li>
-      <li>52</li>
-      <li>52</li>
-      <li>42</li>
-      <li>52</li>
-    </ul>
+    <scroll class="scroll-content" ref='scroll' :probeType='3' :pullUpLoad='true' @scroll="homeScroll">
+      <home-swiper :banner='banner'></home-swiper>
+      <home-recommend :recommend='recommend'></home-recommend>
+      <feature-view></feature-view>
+      <tab-control :titles='titles' @changeType='changeType'></tab-control>
+      <goods :goods='showGoods'></goods>
+    </scroll>
+    <back-top @click.native="backTop" v-show="showBackTop"></back-top>
   </div>
 </template>
 
@@ -79,6 +25,8 @@ import Goods from 'components/content/goods/goods'
 
 import TabControl from 'components/content/tabControl/tabControl'
 
+import Scroll from 'components/common/scroll/scroll'
+import BackTop from 'components/content/backTop/BackTop'
 export default {
   name: 'home',
   components:{
@@ -87,7 +35,9 @@ export default {
        HomeRecommend,
        FeatureView,
        TabControl,
-       Goods
+       Goods,
+       Scroll,
+       BackTop
     },
   data () {
     return {
@@ -99,7 +49,8 @@ export default {
         new:{page:0,list:[]},
         sell:{page:0,list:[]}
       },
-      currentType:'pop'
+      currentType:'pop',
+      showBackTop:false
     }
   },
   computed: {
@@ -139,7 +90,15 @@ export default {
       // this.goods[type].list=this.goods[type].list.concat(res.data.list)
       this.goods[type].list.push(...res.data.list)
         // console.log(this.goods[type].list)
+        this.goods[type].page+=1
       })
+    },
+    backTop(){
+      // console.log(this.$refs.scroll.scroll)
+      this.$refs.scroll.scrollTo(0,0)
+    },
+    homeScroll(positon){
+      this.showBackTop=(-positon.y)>1000
     }
   },
   created() {
@@ -149,12 +108,17 @@ export default {
     this.getHomeGoods('new')
     this.getHomeGoods('sell')
   },
+  mounted(){
+    this.bus.$on('imgload',() => {
+      this.$refs.scroll.refresh()
+    })
+  }
 }
 
 </script>
 
 <style >
-  #home{padding-top: 44px;}
+  #home{padding-top: 44px;height: 100vh;position: relative;}
  .home-nav {
    background: pink;
    color: white;
@@ -170,4 +134,12 @@ export default {
    background: #fff;
    z-index: 999;
  }
+ .scroll-content {
+   position: absolute;
+   top: 44px;
+   bottom: 49px;
+   left: 0;
+   right: 0;
+ }
+
 </style>
