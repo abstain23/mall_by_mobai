@@ -3,11 +3,12 @@
     <nav-bar class="home-nav">
       <span slot='center'>购物街</span>
     </nav-bar>
-    <scroll class="scroll-content" ref='scroll' :probeType='3' :pullUpLoad='true' @scroll="homeScroll">
-      <home-swiper :banner='banner'></home-swiper>
+    <tab-control :titles='titles' @changeType='changeType' ref="tabControl1" class="fixed" v-show="isTabFixed"></tab-control>
+    <scroll class="scroll-content" ref='scroll' :probeType='3' :pullUpLoad='true' @scroll="homeScroll" @pullingUp='loadMore'>
+      <home-swiper :banner='banner' @homeSwiperImgLoad='hmSwiperload'></home-swiper>
       <home-recommend :recommend='recommend'></home-recommend>
       <feature-view></feature-view>
-      <tab-control :titles='titles' @changeType='changeType'></tab-control>
+      <tab-control :titles='titles' @changeType='changeType' ref="tabControl2" :class="{fixed:isTabFixed}"></tab-control>
       <goods :goods='showGoods'></goods>
     </scroll>
     <back-top @click.native="backTop" v-show="showBackTop"></back-top>
@@ -27,6 +28,9 @@ import TabControl from 'components/content/tabControl/tabControl'
 
 import Scroll from 'components/common/scroll/scroll'
 import BackTop from 'components/content/backTop/BackTop'
+
+import {debounce} from 'common/utils';
+
 export default {
   name: 'home',
   components:{
@@ -50,7 +54,10 @@ export default {
         sell:{page:0,list:[]}
       },
       currentType:'pop',
-      showBackTop:false
+      showBackTop:false,
+      tabOffsetTop:0,
+      isTabFixed:false,
+      saveY:0
     }
   },
   computed: {
@@ -71,6 +78,8 @@ export default {
           this.currentType='sell'
           break
       }
+      this.$refs.tabControl1.currentIndex=index
+      this.$refs.tabControl2.currentIndex=index
     },
     // 网络请求方法
     getHomeMultidata(){
@@ -99,7 +108,33 @@ export default {
     },
     homeScroll(positon){
       this.showBackTop=(-positon.y)>1000
+      this.isTabFixed = (-positon.y) > this.tabOffsetTop
+    },
+    loadMore(){
+      // console.log('more')
+      new Promise((resolve) => {
+        this.getHomeGoods(this.currentType)
+        resolve()
+      }).then(() => {
+        this.$refs.scroll.finishedPullUp()
+        console.log(this.goods[this.currentType].list.length)
+      })
+    },
+    hmSwiperload() {
+      this.tabOffsetTop = this.$refs.tabControl2.$el.offsetTop
     }
+  },
+  destroyed(){
+    console.log('destroyed')
+  },
+  activated(){
+    // console.log('active')
+    this.$refs.scroll.scrollTo(0,this.saveY,0)
+    this.$refs.scroll.refresh()
+  },
+  deactivated(){
+    // console.log('deactive')
+    this.saveY = this.$refs.scroll.getScrollY()
   },
   created() {
     this.getHomeMultidata()
@@ -109,9 +144,12 @@ export default {
     this.getHomeGoods('sell')
   },
   mounted(){
+    const refresh = debounce(this.$refs.scroll.refresh,200)
+
     this.bus.$on('imgload',() => {
-      this.$refs.scroll.refresh()
+      refresh()
     })
+
   }
 }
 
@@ -128,9 +166,8 @@ export default {
    right: 0;
    z-index: 999;
  } 
- .tab-control {
-   position: sticky;
-   top:44px;
+ .fixed {
+   position: relative;
    background: #fff;
    z-index: 999;
  }

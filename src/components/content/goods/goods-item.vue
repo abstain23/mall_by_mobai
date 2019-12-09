@@ -42,7 +42,7 @@ export default {
     width: 48%;
     img {
       width: 100%;
-      // height: 100%;
+      height: 100%;
       border-radius: 5px;
     }
     .goods-info{
