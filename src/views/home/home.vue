@@ -24,6 +24,7 @@ import HomeRecommend from './childCom/HomeRecommend'
 import FeatureView from './childCom/FeatureView'
 import Goods from 'components/content/goods/goods'
 
+
 import TabControl from 'components/content/tabControl/tabControl'
 
 import Scroll from 'components/common/scroll/scroll'
@@ -49,9 +50,9 @@ export default {
       recommend:[],
       titles:['流行','新款','精选'],
       goods:{
-        pop:{page:0,list:[]},
-        new:{page:0,list:[]},
-        sell:{page:0,list:[]}
+        pop:{page:0,list:[],positionY:0},
+        new:{page:0,list:[],positionY:0},
+        sell:{page:0,list:[],positionY:0}
       },
       currentType:'pop',
       showBackTop:false,
@@ -78,8 +79,11 @@ export default {
           this.currentType='sell'
           break
       }
+      this.$refs.scroll.scrollTo(0,this.goods[this.currentType].positionY,0)
+      this.$refs.scroll.refresh()
       this.$refs.tabControl1.currentIndex=index
       this.$refs.tabControl2.currentIndex=index
+
     },
     // 网络请求方法
     getHomeMultidata(){
@@ -99,16 +103,17 @@ export default {
       // this.goods[type].list=this.goods[type].list.concat(res.data.list)
       this.goods[type].list.push(...res.data.list)
         // console.log(this.goods[type].list)
-        this.goods[type].page+=1
+      this.goods[type].page+=1
       })
     },
     backTop(){
       // console.log(this.$refs.scroll.scroll)
       this.$refs.scroll.scrollTo(0,0)
     },
-    homeScroll(positon){
-      this.showBackTop=(-positon.y)>1000
-      this.isTabFixed = (-positon.y) > this.tabOffsetTop
+    homeScroll(position){
+      this.showBackTop=(-position.y)>1000
+      this.isTabFixed = (-position.y) > this.tabOffsetTop
+      this.goods[this.currentType].positionY = position.y
     },
     loadMore(){
       // console.log('more')
@@ -117,7 +122,7 @@ export default {
         resolve()
       }).then(() => {
         this.$refs.scroll.finishedPullUp()
-        console.log(this.goods[this.currentType].list.length)
+        this.$refs.scroll.refresh()
       })
     },
     hmSwiperload() {
@@ -128,17 +133,16 @@ export default {
     console.log('destroyed')
   },
   activated(){
-    // console.log('active')
+    console.log('active')
     this.$refs.scroll.scrollTo(0,this.saveY,0)
     this.$refs.scroll.refresh()
   },
   deactivated(){
-    // console.log('deactive')
+    console.log('deactive')
     this.saveY = this.$refs.scroll.getScrollY()
   },
   created() {
     this.getHomeMultidata()
-
     this.getHomeGoods('pop')
     this.getHomeGoods('new')
     this.getHomeGoods('sell')
