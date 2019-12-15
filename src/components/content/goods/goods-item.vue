@@ -32,7 +32,7 @@ export default {
       this.bus.$emit('imgload')
     },
     goToDetail(){
-      this.$router.push('detail')
+      this.$router.push('detail/' + this.goodsItem.iid)
     }
   }
 }

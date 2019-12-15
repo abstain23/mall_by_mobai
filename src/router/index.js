@@ -18,7 +18,7 @@ const routes = [
   {path:'/category',component:CateGory},
   {path:'/cart',component:Cart},
   {path:'/profile',component:Profile},
-  {path:'/detail',component:Detail}
+  {path:'/detail/:iid',component:Detail}
 ]
 
 

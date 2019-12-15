@@ -126,19 +126,22 @@ export default {
       })
     },
     hmSwiperload() {
-      this.tabOffsetTop = this.$refs.tabControl2.$el.offsetTop
+      const offsetTop = this.$refs.tabControl2.$el.offsetTop 
+      this.tabOffsetTop = offsetTop
+      this.goods['new'].positionY = - offsetTop
+      this.goods['sell'].positionY = - offsetTop
     }
   },
   destroyed(){
     console.log('destroyed')
   },
   activated(){
-    console.log('active')
+    // console.log('active')
     this.$refs.scroll.scrollTo(0,this.saveY,0)
     this.$refs.scroll.refresh()
   },
   deactivated(){
-    console.log('deactive')
+    // console.log('deactive')
     this.saveY = this.$refs.scroll.getScrollY()
   },
   created() {
@@ -159,7 +162,7 @@ export default {
 
 </script>
 
-<style >
+<style scoped>
   #home{padding-top: 44px;height: 100vh;position: relative;}
  .home-nav {
    background: pink;

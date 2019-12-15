@@ -1,8 +1,14 @@
 <template>
   <div class="detailNavBar">
     <nav-bar>
+      <div slot="left" class='back' @click="goback">
+        <img src="~assets/img/common/back.svg" alt="">
+      </div>
       <div slot="center" class="title">
-        <div v-for='item in titles' class="title-item">{{item}}</div>
+        <div v-for='(item, index) in titles' class="title-item"
+        :class="{active:index === currentIndex}"
+        @click = 'changeIndex(index)'
+        >{{item}}</div>
       </div>
     </nav-bar>
   </div>
@@ -16,11 +22,19 @@ export default {
 
   data () {
     return {
-      titles:['商品','参数','评论','推荐']
+      titles:['商品','参数','评论','推荐'],
+      currentIndex:0
     }
   },
 
-  methods: {},
+  methods: {
+    changeIndex(index) {
+      this.currentIndex = index
+    },
+    goback() {
+      this.$router.go(-1)
+    }
+  },
   components:{
     NavBar
   }
@@ -29,12 +43,18 @@ export default {
 
 <style lang='scss' scoped>
   .detailNavBar {
+    .back img{
+      padding-top: 10px;
+    }
     .title{
       width: 100%;
       height: 100%;
       display: flex;
       .title-item {
         flex: 1;
+      }
+      .active {
+        color: pink;
       }
     }
   }
