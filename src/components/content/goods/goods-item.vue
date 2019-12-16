@@ -33,6 +33,12 @@ export default {
     },
     goToDetail(){
       this.$router.push('detail/' + this.goodsItem.iid)
+      // this.$router.push({
+      //   path:'detail',
+      //   query:{
+      //     iid: this.goodsItem.iid
+      //   }
+      // })
     }
   }
 }

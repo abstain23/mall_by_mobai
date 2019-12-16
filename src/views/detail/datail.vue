@@ -6,6 +6,7 @@
       <detail-base-info :goods='goods'></detail-base-info>
       <detail-shop-info :shop='shop'></detail-shop-info>
       <detail-goods-info :detailInfo='detailInfo' @detailImgload='detailImgload'></detail-goods-info>
+      <detail-param-info :param-info='itemParams'></detail-param-info>
     </scroll>
     
   </div>
@@ -17,6 +18,7 @@ import detailSwiper from './childCom/detailSwiper'
 import detailBaseInfo from './childCom/detailBaseInfo.vue'
 import detailShopInfo from './childCom/detailShopInfo'
 import detailGoodsInfo from './childCom/detailGoodsInfo'
+import detailParamInfo from './childCom/detailParamInfo'
 
 import Scroll from 'components/common/scroll/scroll'
 import { getDetail,Goods,Shop } from "server/detail";
@@ -29,7 +31,8 @@ import { getDetail,Goods,Shop } from "server/detail";
       detailBaseInfo,
       detailShopInfo,
       Scroll,
-      detailGoodsInfo
+      detailGoodsInfo,
+      detailParamInfo
     },
     data() {
       return {
@@ -37,7 +40,8 @@ import { getDetail,Goods,Shop } from "server/detail";
         topImages: null,
         goods: {},
         shop: {},
-        detailInfo:{}
+        detailInfo:{},
+        itemParams: {}
       }
     },
     created() {
@@ -51,6 +55,8 @@ import { getDetail,Goods,Shop } from "server/detail";
         this.shop = new Shop(data.shopInfo)
 
         this.detailInfo = data.detailInfo
+
+        this.itemParams = data.itemParams
       })
     },
     mounted(){

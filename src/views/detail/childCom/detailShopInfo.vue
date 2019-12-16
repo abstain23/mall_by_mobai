@@ -23,7 +23,7 @@
         <table>
           <tr v-for="(item, index) in shop.score" :key="index">
             <td>{{item.name}}</td>
-            <td class="score" :class="{'score-better': item.isBetter}">{{item.score}}</td>
+            <td class="score" :class="{'score-better': item.isBetter}">{{item.score | score}}</td>
             <td class="better" :class="{'better-more': item.isBetter}"><span>{{item.isBetter ? '高':'低'}}</span></td>
           </tr>
         </table>
@@ -47,6 +47,19 @@
       sellCountFilter: function (value) {
         if (value < 10000) return value;
         return (value/10000).toFixed(1) + '万'
+      },
+      score(value){
+        // let temp = value.toString().split('.')
+        // if(temp[1]){
+        //   if(temp[1].length===1){
+        //     return value.toString() + '0'
+        //   }else {
+        //     return value
+        //   }
+        // }else {
+        //   return value.toString() + '.00'
+        // }
+        return value.toFixed(2) 
       }
     }
 	}
