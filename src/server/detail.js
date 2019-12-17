@@ -9,6 +9,12 @@ export function getDetail(iid) {
   })
 }
 
+export function getRecommends(){
+  return request({
+    url: 'recommend'
+  })  
+}
+
 export function Goods(itemInfo,columns,services,color){
   this.title = itemInfo.title
   this.desc = itemInfo.desc

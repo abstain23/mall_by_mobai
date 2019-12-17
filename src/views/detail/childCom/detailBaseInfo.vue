@@ -88,9 +88,10 @@ export default {
       height: 14px;
       position: relative;
       top: 2px;
+      margin-right: 2px;
     }
   .info-service-item span {
-    font-size: 1rem;
+    font-size: 14px;
     color: #333;
   }
   }

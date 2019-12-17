@@ -5,8 +5,10 @@
       <detail-swiper :topImages='topImages'></detail-swiper>
       <detail-base-info :goods='goods'></detail-base-info>
       <detail-shop-info :shop='shop'></detail-shop-info>
-      <detail-goods-info :detailInfo='detailInfo' @detailImgload='detailImgload'></detail-goods-info>
+      <detail-goods-info :detailInfo='detailInfo' @detailImageLoad='detailImageLoad'></detail-goods-info>
       <detail-param-info :param-info='itemParams'></detail-param-info>
+      <detail-comment :comment-info="comments"></detail-comment>
+      <goods :goods='recommends'></goods>
     </scroll>
     
   </div>
@@ -19,9 +21,12 @@ import detailBaseInfo from './childCom/detailBaseInfo.vue'
 import detailShopInfo from './childCom/detailShopInfo'
 import detailGoodsInfo from './childCom/detailGoodsInfo'
 import detailParamInfo from './childCom/detailParamInfo'
+import detailComment from './childCom/detailComment'
 
 import Scroll from 'components/common/scroll/scroll'
-import { getDetail,Goods,Shop } from "server/detail";
+import goods from 'components/content/goods/goods'
+
+import { getDetail, Goods, Shop, getRecommends } from "server/detail";
 
   export default {
     name:'detail',
@@ -32,7 +37,9 @@ import { getDetail,Goods,Shop } from "server/detail";
       detailShopInfo,
       Scroll,
       detailGoodsInfo,
-      detailParamInfo
+      detailParamInfo,
+      detailComment,
+      goods
     },
     data() {
       return {
@@ -41,7 +48,9 @@ import { getDetail,Goods,Shop } from "server/detail";
         goods: {},
         shop: {},
         detailInfo:{},
-        itemParams: {}
+        itemParams: {},
+        comments: {},
+        recommends: []
       }
     },
     created() {
@@ -57,13 +66,23 @@ import { getDetail,Goods,Shop } from "server/detail";
         this.detailInfo = data.detailInfo
 
         this.itemParams = data.itemParams
+
+        if (data.rate.list) {
+            this.comments = data.rate.list[0];
+          }
+      })
+
+      getRecommends().then(res => {
+        console.log(res)
+        this.recommends = res.data.list
       })
     },
     mounted(){
       // console.log()
     },
     methods:{
-      detailImgload(){
+      detailImageLoad(){
+        // console.log('x')
         this.$refs.scroll.refresh()
       }
     }
