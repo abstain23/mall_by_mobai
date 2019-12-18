@@ -30,7 +30,8 @@ import TabControl from 'components/content/tabControl/tabControl'
 import Scroll from 'components/common/scroll/scroll'
 import BackTop from 'components/content/backTop/BackTop'
 
-import {debounce} from 'common/utils';
+
+import {itemImageListennerMixin} from 'common/mixin';
 
 export default {
   name: 'home',
@@ -44,6 +45,7 @@ export default {
        Scroll,
        BackTop
     },
+    mixins:[itemImageListennerMixin],
   data () {
     return {
       banner:[],
@@ -138,10 +140,13 @@ export default {
     // console.log('active')
     this.$refs.scroll.scrollTo(0,this.saveY,0)
     this.$refs.scroll.refresh()
+    // console.log(this.saveY)
   },
   deactivated(){
     // console.log('deactive')
     this.saveY = this.$refs.scroll.getScrollY()
+    // console.log(this.saveY)
+    this.bus.$off('imgload', this.itemImageListener)
   },
   created() {
     this.getHomeMultidata()
@@ -149,14 +154,7 @@ export default {
     this.getHomeGoods('new')
     this.getHomeGoods('sell')
   },
-  mounted(){
-    const refresh = debounce(this.$refs.scroll.refresh,200)
-
-    this.bus.$on('imgload',() => {
-      refresh()
-    })
-
-  }
+  mounted(){}
 }
 
 </script>

@@ -17,7 +17,9 @@ export default {
     return {
     }
   },
-
+  mounted(){
+    // console.log(this.goodsItem)
+  },
   props:{
     goodsItem:{
       type: Object,
@@ -29,14 +31,26 @@ export default {
   computed:{
     showImage(){
       return this.goodsItem.image || this.goodsItem.show.img
-    }
+    },
   },
   methods: {
     imgLoad(){
       this.bus.$emit('imgload')
+      // if(this.$route.path.indexOf('home') !== -1){
+      //   // console.log('iiii')
+      //   this.bus.$emit('imgload')
+      // }else if(this.$route.path.indexOf('detail') !==-1){
+      //   this.bus.$emit('detailImageload')
+      // }
+      
     },
     goToDetail(){
-      this.$router.push('detail/' + this.goodsItem.iid)
+      if(this.goodsItem.iid){
+        this.$router.push('detail/' + this.goodsItem.iid)
+      }else if(this.goodsItem.item_id) {
+        this.$router.push(this.goodsItem.item_id)
+      }
+      this.bus.$emit('loadDetail')
       // this.$router.push({
       //   path:'detail',
       //   query:{

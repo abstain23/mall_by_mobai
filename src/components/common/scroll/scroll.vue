@@ -28,12 +28,13 @@
     methods:{
       scrollTo(x,y,time=500){
         this.scroll&&this.scroll.scrollTo(x,y,time)
+        console.log('scrollto')
       },
       finishedPullUp(){
         this.scroll&&this.scroll.finishPullUp()
       },
       refresh(){
-        console.log('---')
+        console.log('--- refresh')
         this.scroll&&this.scroll.refresh()
       },
       getScrollY(){
