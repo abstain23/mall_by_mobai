@@ -47,10 +47,8 @@ export default {
     goToDetail(){
       if(this.goodsItem.iid){
         this.$router.push('detail/' + this.goodsItem.iid)
-      }else if(this.goodsItem.item_id) {
-        this.$router.push(this.goodsItem.item_id)
       }
-      this.bus.$emit('loadDetail')
+      this.bus.$emit('loadDetail',111)
       // this.$router.push({
       //   path:'detail',
       //   query:{

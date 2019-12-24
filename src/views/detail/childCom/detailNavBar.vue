@@ -16,20 +16,30 @@
 
 <script>
 import NavBar from 'components/common/navbar/NavBar'
-
 export default {
   name: 'detailNavBar',
-
   data () {
     return {
       titles:['商品','参数','评论','推荐'],
       currentIndex:0
     }
   },
-
+  props:{
+    offsetTops:{
+      type: Array,
+      default() {
+        return []
+      }
+    }
+  },
   methods: {
     changeIndex(index) {
       this.currentIndex = index
+      if(this.offsetTops.length){
+        // console.log(this.$parent.$refs.scroll.scrollTo)
+        this.$parent.$refs.scroll.scrollTo(0,-this.offsetTops[index], 0)
+        // scrollTo(0,this.offsetTops[index])
+      }
     },
     goback() {
       this.$router.go(-1)

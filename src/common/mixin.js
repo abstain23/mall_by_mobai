@@ -11,7 +11,21 @@ export const itemImageListennerMixin = {
     this.itemImageListener = () => {
       refresh()
     }
-    console.log('mixin')
+    // console.log('mixin')
     this.bus.$on('imgload', this.itemImageListener)
+  }
+}
+
+export const backTopMixin = {
+  data(){
+    return {
+      showBackTop:false
+    }
+  },
+  methods: {
+    backTop(){
+      // console.log(this.$refs.scroll.scroll)
+      this.$refs.scroll.scrollTo(0,0)
+    },
   }
 }
