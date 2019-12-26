@@ -37,6 +37,8 @@ import goods from 'components/content/goods/goods'
 import BackTop from 'components/content/backTop/BackTop'
 import { getDetail, Goods, Shop, getRecommends } from "server/detail";
 import {itemImageListennerMixin, backTopMixin} from 'common/mixin';
+
+import {mapActions} from 'vuex'
   export default {
     name:'detail',
     components:{
@@ -86,6 +88,7 @@ import {itemImageListennerMixin, backTopMixin} from 'common/mixin';
       this.bus.$off('imgload', this.itemImageListener)
     },
     methods:{
+      ...mapActions(['addCart']),
       addToCart(){
         const product = {}
         // console.log(this.goods)
@@ -95,8 +98,13 @@ import {itemImageListennerMixin, backTopMixin} from 'common/mixin';
         product.price = this.goods.realPrice
         product.iid = this.iid
         product.count = 0
+        product.isChecked = false
         //加入到购物车
-        this.$store.dispatch('addCart', product)
+        // this.$store.dispatch('addCart', product)
+        this.addCart(product).then(res => {
+          // console.log(this.$refs.scroll)
+          this.$toast.show(res, 1000)
+        })
       },
       detailScroll(position){
         this.showBackTop=(-position.y)>1000

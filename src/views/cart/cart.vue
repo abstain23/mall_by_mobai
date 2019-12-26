@@ -4,7 +4,7 @@
       <div slot="center">购物车({{cartListLength}})</div>
     </nav-bar>
     <!-- 商品列表 -->
-    <cart-list></cart-list>
+      <cart-list></cart-list>
   </div>
 </template>
 
@@ -12,6 +12,7 @@
 import NavBar from 'components/common/navbar/NavBar'
 import cartList from './childCom/cartList'
 import {mapGetters} from 'vuex'
+
 
 export default {
   name: 'cart',
@@ -31,6 +32,8 @@ export default {
 
 <style lang='scss'>
   #cart {
+    height: 100vh;
+    position: relative;
     .cart-nav {
       background: pink;
       color: #fff;
